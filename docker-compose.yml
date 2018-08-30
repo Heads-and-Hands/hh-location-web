@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  db:
+      image: mysql:5.7
+      ports:
+        - "3366:3306"
+      networks:
+        - default
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: hh-location
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+  app:
+      build: ./hh-location
+      restart: always
+      ports:
+        - "8887:8877"
+      networks:
+        - default
+      depends_on:
+        - db
+      volumes:
+        - "./config:/go/bin/config"

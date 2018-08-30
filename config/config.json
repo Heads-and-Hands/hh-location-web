@@ -1,0 +1,3 @@
+{
+    "DbString": "root:root@tcp(db:3306)/hh-location?parseTime=true"
+}
