@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `beacon`;
 CREATE TABLE `beacon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
-  `pos_x` int(11) DEFAULT NULL,
-  `pos_y` int(11) DEFAULT NULL,
+  `correction` int(11) NOT NULL DEFAULT '0',
+  `pos_x` int(11) NOT NULL DEFAULT '0',
+  `pos_y` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +38,7 @@ CREATE TABLE `beacon` (
 
 LOCK TABLES `beacon` WRITE;
 /*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
-INSERT INTO `beacon` VALUES (1,'test',0,0),(2,'test2',0,0);
+INSERT INTO `beacon` VALUES (1,'test',0,0,0),(2,'test2',0,0,0);
 /*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,4 +113,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-30 22:14:55
+-- Dump completed on 2018-08-31  1:14:41

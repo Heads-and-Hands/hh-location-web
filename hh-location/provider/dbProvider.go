@@ -5,11 +5,11 @@ import (
 	"beacon/hh-location/models"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"beacon/hh-location/config"
+	"beacon/hh-location/configurator"
 )
 
 func GetDB() *sqlx.DB {
-	cfg := config.GetConfiguration()
+	cfg := configurator.GetConfiguration()
 	dbString := cfg.DbString
 	log.Println(dbString)
 	db, err := sqlx.Connect("mysql", dbString)
