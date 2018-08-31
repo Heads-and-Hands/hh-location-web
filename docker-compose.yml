@@ -17,6 +17,8 @@ services:
         MYSQL_DATABASE: hh-location
         MYSQL_USER: user
         MYSQL_PASSWORD: password
+      volumes:
+        - "./database:/var/lib/mysql"
   app:
       build: ./hh-location
       restart: always
