@@ -5,4 +5,3 @@ type Device struct {
 	UID string `db:"uid"`
 	Name string `db:"name"`
 }
-

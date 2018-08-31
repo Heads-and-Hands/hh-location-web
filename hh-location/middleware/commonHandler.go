@@ -2,13 +2,32 @@ package middleware
 
 import (
 	"net/http"
-	"log"
 	"encoding/json"
+	"log"
 )
 
 var commonHandler = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.RequestURI)
+		log.Printf("%s %s \n", r.Method, r.RequestURI)
+
+		var token string = ""
+
+		t := r.Header.Get("token")
+		if t != "" {
+			token = t
+		}
+
+		keys, ok := r.URL.Query()["token"]
+		if ok && len(keys[0]) > 0 {
+			token = keys[0]
+		}
+
+
+		if token == "" {
+			http.Error(w, "Not authorized", 401)
+			return
+		}
+
 		next.ServeHTTP(w, r)
 	})
 }

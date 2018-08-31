@@ -7,3 +7,4 @@ type Beacon struct {
 	PosX int `db:"pos_x"`
 	PosY int `db:"pos_y"`
 }
+

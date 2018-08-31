@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type ormProvider struct {
@@ -46,33 +47,41 @@ func (dbp ormProvider) getDB() *gorm.DB {
 
 func (dbp ormProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
-	dbp.getDB().Find(&beacons)
+	dbp.getDB().Table("beacon").Find(&beacons)
 	return beacons
 }
 
 func (dbp ormProvider) GetDevices() []models.Device {
 	devices := []models.Device{}
-	dbp.getDB().Find(&devices)
+	dbp.getDB().Table("device").Find(&devices)
 	return devices
 }
 
 func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
-	positions := []models.DevicesPositions{}
 	db := dbp.getDB()
-	err := db.Select(&positions, "select position.id, position.pos_x, position.pos_y, position.time, device.id as device_id, device.name as device_name from device inner join position on (position.device_id = device.id and position.id = (select max(p.id) from position as p where p.device_id = device.id))")
-	if err != nil {
-		log.Println(err)
+	devices := []models.Device{}
+	db.Table("device").Find(&devices)
+
+	positions := []models.DevicesPositions{}
+	for _, elem := range devices {
+		p := models.Position{}
+		db.Table("position").Where("device_id = ?", elem.ID).Last(&p)
+		dp := models.DevicesPositions {
+			ID: p.ID,
+			PosY: p.PosY,
+			PosX: p.PosX,
+			Time: p.Time,
+			DeviceID: elem.ID,
+			DeviceName: elem.Name,
+		}
+		positions = append(positions, dp)
 	}
-	db.Close()
+
 	return positions
 }
 
 func (dbp ormProvider) PostPosition(p models.Position) {
 	db := dbp.getDB()
-	//_, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
-	//	p.DeviceID, p.PosX, p.PosY)
-	//if err != nil {
-	//	log.Println(err)
-	//}
-	db.Close()
+	p.Time = time.Now()
+	db.Table("position").Create(&p)
 }

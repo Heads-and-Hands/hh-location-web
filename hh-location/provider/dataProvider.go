@@ -18,5 +18,5 @@ type DataProvider interface {
 
 func GetProvider() DataProvider {
 	cfg := configurator.GetConfiguration()
-	return GetDBInstance(cfg)
+	return GetOrmInstance(cfg)
 }
