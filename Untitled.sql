@@ -29,7 +29,7 @@ CREATE TABLE `beacon` (
   `pos_x` int(11) NOT NULL DEFAULT '0',
   `pos_y` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `beacon` (
 
 LOCK TABLES `beacon` WRITE;
 /*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
-INSERT INTO `beacon` VALUES (1,'test',0,0,0),(2,'test2',0,0,0);
+INSERT INTO `beacon` VALUES (3,'zav',0,0,0),(4,'gor',0,0,0),(5,'gne',0,0,0),(6,'poh',0,0,0),(7,'uni',0,0,0);
 /*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,8 +51,8 @@ DROP TABLE IF EXISTS `device`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `device` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(45) COLLATE utf32_unicode_ci NOT NULL,
-  `name` varchar(45) COLLATE utf32_unicode_ci NOT NULL,
+  `uid` varchar(45) CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
+  `name` varchar(45) CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -92,7 +92,6 @@ CREATE TABLE `position` (
 
 LOCK TABLES `position` WRITE;
 /*!40000 ALTER TABLE `position` DISABLE KEYS */;
-INSERT INTO `position` VALUES (1,1,2,'2018-08-30 12:56:52',1),(2,1,1,'2018-08-30 15:53:26',1);
 /*!40000 ALTER TABLE `position` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,4 +112,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-31  1:14:41
+-- Dump completed on 2018-08-31 18:32:35
