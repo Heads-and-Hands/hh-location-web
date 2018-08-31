@@ -6,11 +6,17 @@ import (
 	"github.com/gorilla/mux"
 	"beacon/hh-location/middleware"
 	"beacon/hh-location/handlers"
+	"beacon/hh-location/provider"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
 
 	log.Println("Hello!")
+
+	SetupCloseHandler()
 
 	r := mux.NewRouter()
 
@@ -23,4 +29,19 @@ func main() {
 
 	http.ListenAndServe(":8877", r)
 
+}
+
+func onClose() {
+	provider.GetProvider().Close()
+	log.Println("Buy!")
+}
+
+func SetupCloseHandler() {
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		onClose()
+		os.Exit(0)
+	}()
 }

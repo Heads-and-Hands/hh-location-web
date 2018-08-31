@@ -4,29 +4,30 @@ import (
 	"github.com/tkanos/gonfig"
 	"log"
 	"path/filepath"
+	"sync"
 )
 
 type Configuration struct {
-	DbString 			string
+	DbString string
 }
 
-var confInst Configuration = Configuration{}
+var confInst *Configuration
+var once sync.Once
 
-func GetConfiguration() Configuration {
-	if (Configuration{}) == confInst {
+func GetConfiguration() *Configuration {
+	once.Do(func() {
 		confInst = load()
-	}
-	//return confInst
-	return load()
+	})
+	return confInst
 }
 
-func load() Configuration {
-	result := Configuration{}
+func load() *Configuration {
+	result := &Configuration{}
 	absPath, _ := filepath.Abs("./bin/config/config.json")
-	err := gonfig.GetConf(absPath, &result)
+	err := gonfig.GetConf(absPath, result)
 	if err != nil {
 		log.Println(err)
-		return Configuration{}
+		return &Configuration{}
 	} else {
 		return result
 	}

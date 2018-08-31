@@ -7,7 +7,7 @@ import (
 )
 
 var DeviceHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
-	devices := provider.GetDevices()
+	devices := provider.GetProvider().GetDevices()
 	var payload, _ = json.Marshal(devices)
 	w.Write([]byte(payload))
 })

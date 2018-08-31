@@ -6,60 +6,78 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"beacon/hh-location/configurator"
+	"sync"
 )
 
-func GetDB() *sqlx.DB {
-	cfg := configurator.GetConfiguration()
-	dbString := cfg.DbString
+type dbProvider struct {
+	db *sqlx.DB
+	cfg *configurator.Configuration
+}
+
+var instance *dbProvider
+var once sync.Once
+
+func GetDBInstance(config *configurator.Configuration) *dbProvider {
+	once.Do(func() {
+		instance = &dbProvider{cfg:config}
+	})
+	return instance
+}
+
+func (dbp dbProvider) Close() {
+	dbp.getDB().Close()
+}
+
+func (dbp dbProvider) getDB() *sqlx.DB {
+	dbString := dbp.cfg.DbString
 	log.Println(dbString)
-	db, err := sqlx.Connect("mysql", dbString)
+
+	if dbp.db != nil {
+		return dbp.db
+	}
+	newDb, err := sqlx.Connect("mysql", dbString)
 	if err != nil {
 		log.Println(err)
 	}
-	return db
+	dbp.db = newDb
+	return newDb
 }
 
-func GetBeacons() []models.Beacon {
+func (dbp dbProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
-	db := GetDB()
+	db := dbp.getDB()
 	err := db.Select(&beacons, "SELECT * from beacon")
     if err != nil {
     	log.Println(err)
 	}
-	db.Close()
 	return beacons
 }
 
-func GetDevices() []models.Device {
+func (dbp dbProvider) GetDevices() []models.Device {
 	devices := []models.Device{}
-	db := GetDB()
+	db := dbp.getDB()
 	err := db.Select(&devices, "SELECT * from device")
 	if err != nil {
 		log.Println(err)
 	}
-	db.Close()
 	return devices
 }
 
-func GetDevicesPositions() []models.DevicesPositions {
+func (dbp dbProvider) GetDevicesPositions() []models.DevicesPositions {
 	positions := []models.DevicesPositions{}
-	db := GetDB()
+	db := dbp.getDB()
 	err := db.Select(&positions, "select position.id, position.pos_x, position.pos_y, position.time, device.id as device_id, device.name as device_name from device inner join position on (position.device_id = device.id and position.id = (select max(p.id) from position as p where p.device_id = device.id))")
 	if err != nil {
 		log.Println(err)
 	}
-	db.Close()
 	return positions
 }
 
-func PostPosition(p models.Position) {
-	db := GetDB()
-
+func (dbp dbProvider) PostPosition(p models.Position) {
+	db := dbp.getDB()
     _, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
     	p.DeviceID, p.PosX, p.PosY)
 	if err != nil {
 		log.Println(err)
 	}
-
-	db.Close()
 }
