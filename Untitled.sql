@@ -28,6 +28,7 @@ CREATE TABLE `beacon` (
   `correction` int(11) NOT NULL DEFAULT '0',
   `pos_x` int(11) NOT NULL DEFAULT '0',
   `pos_y` int(11) NOT NULL DEFAULT '0',
+  `uid` varchar(45) COLLATE utf32_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf32 COLLATE=utf32_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +39,7 @@ CREATE TABLE `beacon` (
 
 LOCK TABLES `beacon` WRITE;
 /*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
-INSERT INTO `beacon` VALUES (3,'zav',0,0,0),(4,'gor',0,0,0),(5,'gne',0,0,0),(6,'poh',0,0,0),(7,'uni',0,0,0);
+INSERT INTO `beacon` VALUES (3,'zav',0,0,0,'1111'),(4,'gor',0,0,0,'1112'),(5,'gne',0,0,0,'1113'),(6,'poh',0,0,0,'1114'),(7,'uni',0,0,0,'1115');
 /*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,4 +113,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-31 18:32:35
+-- Dump completed on 2018-08-31 18:42:14
