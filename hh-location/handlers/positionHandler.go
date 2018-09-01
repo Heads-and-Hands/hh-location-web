@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"beacon/hh-location/models"
 	"beacon/hh-location/provider"
+	"io"
+	"time"
 )
 
 var PositionGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
@@ -15,7 +17,7 @@ var PositionGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Re
 
 var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
 
-	p := models.PositionFromJson(r.Body)
+	p := PositionFromJson(r.Body)
 	provider.GetProvider().PostPosition(p)
 
 	var success = map[string]string{"message": "ok"}
@@ -23,3 +25,29 @@ var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.R
 	w.Write([]byte(payload))
 })
 
+func PositionFromJson(from io.ReadCloser) models.Position {
+	type PositionJS struct {
+		UID string
+		PosX int
+		PosY int
+		Time time.Time
+	}
+
+	var d PositionJS
+	decoder := json.NewDecoder(from)
+	err := decoder.Decode(&d)
+	if err != nil {
+		panic(err)
+	}
+
+	devices := provider.GetProvider().GetDevices(d.UID)
+	device := devices[0]
+
+	var p = models.Position{
+		DeviceID:device.ID,
+		PosX:d.PosX,
+		PosY:d.PosX,
+		Time:d.Time,
+	}
+	return p
+}

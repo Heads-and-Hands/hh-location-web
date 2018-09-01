@@ -1,17 +1,17 @@
 package myAdminConfig
 
 import (
-	"beacon/hh-location/provider"
 	"github.com/qor/admin"
 	"beacon/hh-location/models"
 	"net/http"
+	"github.com/jinzhu/gorm"
+	"beacon/hh-location/configurator"
 )
 
 func Init() *http.ServeMux {
-	DB := provider.GetProvider().GetDB()
 
-	//DB.AutoMigrate(&models.Beacon{}, &models.Device{}, &models.Position{})
-
+	dbString := configurator.GetConfiguration().DbString
+	DB, _ := gorm.Open("mysql", dbString)
 	Admin := admin.New(&admin.AdminConfig{DB: DB})
 	Admin.AddResource(&models.Beacon{})
 	Admin.AddResource(&models.Device{})

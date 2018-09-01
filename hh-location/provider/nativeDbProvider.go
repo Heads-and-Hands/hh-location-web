@@ -9,26 +9,26 @@ import (
 	"sync"
 )
 
-type dbProvider struct {
+type nativeDbProvider struct {
 	db *sqlx.DB
 	cfg *configurator.Configuration
 }
 
-var instance *dbProvider
+var instance *nativeDbProvider
 var once sync.Once
 
-func GetDBInstance(config *configurator.Configuration) *dbProvider {
+func GetDBInstance(config *configurator.Configuration) *nativeDbProvider {
 	once.Do(func() {
-		instance = &dbProvider{cfg:config}
+		instance = &nativeDbProvider{cfg:config}
 	})
 	return instance
 }
 
-func (dbp dbProvider) Close() {
+func (dbp nativeDbProvider) Close() {
 	dbp.getDB().Close()
 }
 
-func (dbp dbProvider) getDB() *sqlx.DB {
+func (dbp nativeDbProvider) getDB() *sqlx.DB {
 	dbString := dbp.cfg.DbString
 	log.Println(dbString)
 
@@ -43,7 +43,7 @@ func (dbp dbProvider) getDB() *sqlx.DB {
 	return newDb
 }
 
-func (dbp dbProvider) GetBeacons() []models.Beacon {
+func (dbp nativeDbProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
 	db := dbp.getDB()
 	err := db.Select(&beacons, "SELECT * from beacon")
@@ -53,7 +53,7 @@ func (dbp dbProvider) GetBeacons() []models.Beacon {
 	return beacons
 }
 
-func (dbp dbProvider) GetDevices() []models.Device {
+func (dbp nativeDbProvider) GetDevices(uid string) []models.Device {
 	devices := []models.Device{}
 	db := dbp.getDB()
 	err := db.Select(&devices, "SELECT * from device")
@@ -63,7 +63,7 @@ func (dbp dbProvider) GetDevices() []models.Device {
 	return devices
 }
 
-func (dbp dbProvider) GetDevicesPositions() []models.DevicesPositions {
+func (dbp nativeDbProvider) GetDevicesPositions() []models.DevicesPositions {
 	positions := []models.DevicesPositions{}
 	db := dbp.getDB()
 	err := db.Select(&positions, "select position.id, position.pos_x, position.pos_y, position.time, device.id as device_id, device.name as device_name from device inner join position on (position.device_id = device.id and position.id = (select max(p.id) from position as p where p.device_id = device.id))")
@@ -73,7 +73,7 @@ func (dbp dbProvider) GetDevicesPositions() []models.DevicesPositions {
 	return positions
 }
 
-func (dbp dbProvider) PostPosition(p models.Position) {
+func (dbp nativeDbProvider) PostPosition(p models.Position) {
 	db := dbp.getDB()
     _, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
     	p.DeviceID, p.PosX, p.PosY)
