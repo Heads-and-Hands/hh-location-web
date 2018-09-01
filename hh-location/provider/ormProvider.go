@@ -53,7 +53,7 @@ func (dbp ormProvider) GetBeacons() []models.Beacon {
 
 func (dbp ormProvider) GetDevices(uid string) []models.Device {
 	devices := []models.Device{}
-	if uid == "" {
+	if uid != "" {
 		dbp.getDB().Table("device").Where("uid = ?", uid).First(&devices)
 	} else {
 		dbp.getDB().Table("device").Find(&devices)
