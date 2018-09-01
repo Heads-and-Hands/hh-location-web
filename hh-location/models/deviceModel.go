@@ -5,3 +5,7 @@ type Device struct {
 	UID string `db:"uid"`
 	Name string `db:"name"`
 }
+
+func (Device) TableName() string {
+	return "device"
+}

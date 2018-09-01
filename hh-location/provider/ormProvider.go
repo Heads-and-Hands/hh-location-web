@@ -26,10 +26,10 @@ func GetOrmInstance(config *configurator.Configuration) *ormProvider {
 }
 
 func (dbp ormProvider) Close() {
-	dbp.getDB().Close()
+	dbp.GetDB().Close()
 }
 
-func (dbp ormProvider) getDB() *gorm.DB {
+func (dbp ormProvider) GetDB() *gorm.DB {
 	dbString := dbp.cfg.DbString
 	log.Println(dbString)
 
@@ -47,18 +47,18 @@ func (dbp ormProvider) getDB() *gorm.DB {
 
 func (dbp ormProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
-	dbp.getDB().Table("beacon").Find(&beacons)
+	dbp.GetDB().Table("beacon").Find(&beacons)
 	return beacons
 }
 
 func (dbp ormProvider) GetDevices() []models.Device {
 	devices := []models.Device{}
-	dbp.getDB().Table("device").Find(&devices)
+	dbp.GetDB().Table("device").Find(&devices)
 	return devices
 }
 
 func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
-	db := dbp.getDB()
+	db := dbp.GetDB()
 	devices := []models.Device{}
 	db.Table("device").Find(&devices)
 
@@ -81,7 +81,7 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 }
 
 func (dbp ormProvider) PostPosition(p models.Position) {
-	db := dbp.getDB()
+	db := dbp.GetDB()
 	p.Time = time.Now()
 	db.Table("position").Create(&p)
 }

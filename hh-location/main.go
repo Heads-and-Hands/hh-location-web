@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"beacon/hh-location/myAdminConfig"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	onStart()
 
 	r := mux.NewRouter()
+
 	r.Handle("/", middleware.WebCommonHandler(handlers.IndexHandler)).Methods("GET")
 
 	r.Handle("/device", middleware.WebCommonHandler(handlers.DeviceGetHandler)).Methods("GET")
@@ -25,6 +27,9 @@ func main() {
 
 	r.Handle("/position", middleware.WebCommonHandler(handlers.PositionGetHandler)).Methods("GET")
 	r.Handle("/position", middleware.MobileCommonHandler(handlers.PositionPostHandler)).Methods("POST")
+
+	m := myAdminConfig.Init()
+	r.PathPrefix("/admin").Handler(m)
 
 	http.ListenAndServe(":8877", r)
 }

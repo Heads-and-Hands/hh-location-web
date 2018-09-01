@@ -9,3 +9,6 @@ type Beacon struct {
 	PosY int `db:"pos_y"`
 }
 
+func (Beacon) TableName() string {
+	return "beacon"
+}
