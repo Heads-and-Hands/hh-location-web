@@ -10,7 +10,7 @@ import (
 func Init() *http.ServeMux {
 	DB := provider.GetProvider().GetDB()
 
-	DB.AutoMigrate(&models.Beacon{}, &models.Device{}, &models.Position{})
+	//DB.AutoMigrate(&models.Beacon{}, &models.Device{}, &models.Position{})
 
 	Admin := admin.New(&admin.AdminConfig{DB: DB})
 	Admin.AddResource(&models.Beacon{})
