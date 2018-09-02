@@ -20,57 +20,54 @@ var ormOnce sync.Once
 
 func GetOrmInstance(config *configurator.Configuration) *ormProvider {
 	once.Do(func() {
-		ormInstance = &ormProvider{cfg:config}
+		ormInstance = &ormProvider{
+			cfg: config,
+			db: getDB(config),
+			}
 	})
 	return ormInstance
 }
 
 func (dbp ormProvider) Close() {
-	dbp.getDB().Close()
+	dbp.db.Close()
 }
 
-func (dbp ormProvider) getDB() *gorm.DB {
-	dbString := dbp.cfg.DbString
+func getDB(cfg *configurator.Configuration) *gorm.DB {
+	dbString := cfg.DbString
 	log.Println(dbString)
-
-	if dbp.db != nil {
-		return dbp.db
-	}
 
 	newDb ,err := gorm.Open("mysql", dbString)
 	if err != nil {
 		log.Println(err)
 	}
-	dbp.db = newDb
 	return newDb
 }
 
 func (dbp ormProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
-	dbp.getDB().Table("beacon").Find(&beacons)
+	dbp.db.Table("beacon").Find(&beacons)
 	return beacons
 }
 
 func (dbp ormProvider) GetDevices(uid string) []models.Device {
 	devices := []models.Device{}
 	if uid != "" {
-		dbp.getDB().Table("device").Where("uid = ?", uid).First(&devices)
+		dbp.db.Table("device").Where("uid = ?", uid).First(&devices)
 	} else {
-		dbp.getDB().Table("device").Find(&devices)
+		dbp.db.Table("device").Find(&devices)
 	}
 
 	return devices
 }
 
 func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
-	db := dbp.getDB()
 	devices := []models.Device{}
-	db.Table("device").Find(&devices)
+	dbp.db.Table("device").Find(&devices)
 
 	positions := []models.DevicesPositions{}
 	for _, elem := range devices {
 		p := models.Position{}
-		db.Table("position").Where("device_id = ?", elem.ID).Last(&p)
+		dbp.db.Table("position").Where("device_id = ?", elem.ID).Last(&p)
 		dp := models.DevicesPositions {
 			ID: p.ID,
 			PosY: p.PosY,
@@ -86,7 +83,6 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 }
 
 func (dbp ormProvider) PostPosition(p models.Position) {
-	db := dbp.getDB()
 	p.Time = time.Now()
-	db.Table("position").Create(&p)
+	dbp.db.Table("position").Create(&p)
 }
