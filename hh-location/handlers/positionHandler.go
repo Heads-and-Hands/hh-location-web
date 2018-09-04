@@ -30,7 +30,6 @@ func PositionFromJson(from io.ReadCloser) models.Position {
 		UID  string
 		PosX int
 		PosY int
-		Time time.Time
 	}
 
 	var d PositionJS
@@ -47,7 +46,7 @@ func PositionFromJson(from io.ReadCloser) models.Position {
 		DeviceID: device.ID,
 		PosX:     d.PosX,
 		PosY:     d.PosY,
-		Time:     d.Time,
+		Time:     time.Now(),
 	}
 	return p
 }

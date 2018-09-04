@@ -12,7 +12,7 @@ var commonHandler = func(next http.Handler) http.Handler {
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		var token string = ""
+		var token = ""
 
 		t := r.Header.Get("token")
 		if t != "" {
