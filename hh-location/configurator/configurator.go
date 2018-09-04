@@ -32,4 +32,3 @@ func load() *Configuration {
 		return result
 	}
 }
-

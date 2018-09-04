@@ -1,12 +1,11 @@
 package provider
 
 import (
-	"beacon/hh-location/models"
 	"beacon/hh-location/configurator"
+	"beacon/hh-location/models"
 )
 
 type DataProvider interface {
-
 	GetBeacons() []models.Beacon
 	GetDevices(uid string) []models.Device
 	GetDevicesPositions() []models.DevicesPositions

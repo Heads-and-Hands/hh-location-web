@@ -1,16 +1,16 @@
 package provider
 
 import (
-	"github.com/jmoiron/sqlx"
+	"beacon/hh-location/configurator"
 	"beacon/hh-location/models"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"log"
-	"beacon/hh-location/configurator"
 	"sync"
 )
 
 type nativeDbProvider struct {
-	db *sqlx.DB
+	db  *sqlx.DB
 	cfg *configurator.Configuration
 }
 
@@ -19,7 +19,7 @@ var once sync.Once
 
 func GetDBInstance(config *configurator.Configuration) *nativeDbProvider {
 	once.Do(func() {
-		instance = &nativeDbProvider{cfg:config}
+		instance = &nativeDbProvider{cfg: config}
 	})
 	return instance
 }
@@ -47,8 +47,8 @@ func (dbp nativeDbProvider) GetBeacons() []models.Beacon {
 	beacons := []models.Beacon{}
 	db := dbp.getDB()
 	err := db.Select(&beacons, "SELECT * from beacon")
-    if err != nil {
-    	log.Println(err)
+	if err != nil {
+		log.Println(err)
 	}
 	return beacons
 }
@@ -75,8 +75,8 @@ func (dbp nativeDbProvider) GetDevicesPositions() []models.DevicesPositions {
 
 func (dbp nativeDbProvider) PostPosition(p models.Position) {
 	db := dbp.getDB()
-    _, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
-    	p.DeviceID, p.PosX, p.PosY)
+	_, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
+		p.DeviceID, p.PosX, p.PosY)
 	if err != nil {
 		log.Println(err)
 	}

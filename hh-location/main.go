@@ -1,16 +1,16 @@
 package main
 
 import (
+	"beacon/hh-location/handlers"
+	"beacon/hh-location/middleware"
+	"beacon/hh-location/myAdminConfig"
+	"beacon/hh-location/provider"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"github.com/gorilla/mux"
-	"beacon/hh-location/middleware"
-	"beacon/hh-location/handlers"
-	"beacon/hh-location/provider"
 	"os"
 	"os/signal"
 	"syscall"
-	"beacon/hh-location/myAdminConfig"
 )
 
 func main() {

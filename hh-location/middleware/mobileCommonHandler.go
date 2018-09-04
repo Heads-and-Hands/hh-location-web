@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 var MobileCommonHandler = func(next http.Handler) http.Handler {

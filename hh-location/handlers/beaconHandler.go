@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"net/http"
-	"encoding/json"
 	"beacon/hh-location/provider"
+	"encoding/json"
 	"log"
+	"net/http"
 )
 
 var BeaconGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

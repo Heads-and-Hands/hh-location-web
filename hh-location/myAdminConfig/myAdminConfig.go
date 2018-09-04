@@ -1,11 +1,11 @@
 package myAdminConfig
 
 import (
-	"github.com/qor/admin"
-	"beacon/hh-location/models"
-	"net/http"
-	"github.com/jinzhu/gorm"
 	"beacon/hh-location/configurator"
+	"beacon/hh-location/models"
+	"github.com/jinzhu/gorm"
+	"github.com/qor/admin"
+	"net/http"
 )
 
 func Init() *http.ServeMux {

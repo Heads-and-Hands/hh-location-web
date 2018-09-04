@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"net/http"
 	"encoding/json"
 	"log"
+	"net/http"
 )
 
 var commonHandler = func(next http.Handler) http.Handler {
@@ -24,7 +24,6 @@ var commonHandler = func(next http.Handler) http.Handler {
 			token = keys[0]
 		}
 
-
 		if token == "" {
 			http.Error(w, "Not authorized", 401)
 			return
@@ -34,7 +33,7 @@ var commonHandler = func(next http.Handler) http.Handler {
 	})
 }
 
-var NotImplementedHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+var NotImplementedHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	var success = map[string]string{"message": "Not implemented"}
 	var payload, _ = json.Marshal(success)
 	w.Write([]byte(payload))

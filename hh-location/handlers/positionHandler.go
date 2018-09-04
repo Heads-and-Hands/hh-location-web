@@ -1,21 +1,21 @@
 package handlers
 
 import (
-	"net/http"
-	"encoding/json"
 	"beacon/hh-location/models"
 	"beacon/hh-location/provider"
+	"encoding/json"
 	"io"
+	"net/http"
 	"time"
 )
 
-var PositionGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+var PositionGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	positions := provider.GetProvider().GetDevicesPositions()
 	var payload, _ = json.Marshal(positions)
 	w.Write([]byte(payload))
 })
 
-var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 	p := PositionFromJson(r.Body)
 	provider.GetProvider().PostPosition(p)
@@ -27,7 +27,7 @@ var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.R
 
 func PositionFromJson(from io.ReadCloser) models.Position {
 	type PositionJS struct {
-		UID string
+		UID  string
 		PosX int
 		PosY int
 		Time time.Time
@@ -44,10 +44,10 @@ func PositionFromJson(from io.ReadCloser) models.Position {
 	device := devices[0]
 
 	var p = models.Position{
-		DeviceID:device.ID,
-		PosX:d.PosX,
-		PosY:d.PosY,
-		Time:d.Time,
+		DeviceID: device.ID,
+		PosX:     d.PosX,
+		PosY:     d.PosY,
+		Time:     d.Time,
 	}
 	return p
 }

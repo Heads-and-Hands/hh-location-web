@@ -1,18 +1,18 @@
 package provider
 
 import (
-	"sync"
 	"beacon/hh-location/configurator"
 	"beacon/hh-location/models"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"github.com/jinzhu/gorm"
+	"log"
+	"sync"
 	"time"
 )
 
 type ormProvider struct {
 	cfg *configurator.Configuration
-	db *gorm.DB
+	db  *gorm.DB
 }
 
 var ormInstance *ormProvider
@@ -22,8 +22,8 @@ func GetOrmInstance(config *configurator.Configuration) *ormProvider {
 	once.Do(func() {
 		ormInstance = &ormProvider{
 			cfg: config,
-			db: getDB(config),
-			}
+			db:  getDB(config),
+		}
 	})
 	return ormInstance
 }
@@ -36,7 +36,7 @@ func getDB(cfg *configurator.Configuration) *gorm.DB {
 	dbString := cfg.DbString
 	log.Println(dbString)
 
-	newDb ,err := gorm.Open("mysql", dbString)
+	newDb, err := gorm.Open("mysql", dbString)
 	if err != nil {
 		log.Println(err)
 	}
@@ -68,12 +68,12 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 	for _, elem := range devices {
 		p := models.Position{}
 		dbp.db.Table("position").Where("device_id = ?", elem.ID).Last(&p)
-		dp := models.DevicesPositions {
-			ID: p.ID,
-			PosY: p.PosY,
-			PosX: p.PosX,
-			Time: p.Time,
-			DeviceID: elem.ID,
+		dp := models.DevicesPositions{
+			ID:         p.ID,
+			PosY:       p.PosY,
+			PosX:       p.PosX,
+			Time:       p.Time,
+			DeviceID:   elem.ID,
 			DeviceName: elem.Name,
 		}
 		positions = append(positions, dp)
