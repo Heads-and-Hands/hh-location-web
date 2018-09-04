@@ -22,6 +22,7 @@ func main() {
 	r.Handle("/", middleware.WebCommonHandler(handlers.IndexHandler)).Methods("GET")
 
 	r.Handle("/device", middleware.WebCommonHandler(handlers.DeviceGetHandler)).Methods("GET")
+	r.Handle("/device", middleware.MobileCommonHandler(handlers.DevicePostHandler)).Methods("POST")
 
 	r.Handle("/beacon", middleware.MobileCommonHandler(handlers.BeaconGetHandler)).Methods("GET")
 

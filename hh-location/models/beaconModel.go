@@ -1,12 +1,12 @@
 package models
 
 type Beacon struct {
-	ID         int    `db:"id"`
-	Uid        int    `db:"uid"`
-	Name       string `db:"name"`
-	Correction int    `db:"correction"`
-	PosX       int    `db:"pos_x"`
-	PosY       int    `db:"pos_y"`
+	Id         int    `db:"id",json:"id"`
+	Uid        int    `db:"uid",json:"uid"`
+	Name       string `db:"name",json:"name"`
+	Correction int    `db:"correction",json:"correction"`
+	PosX       int    `db:"pos_x",json:"posX"`
+	PosY       int    `db:"pos_y",json:"posY"`
 }
 
 func (Beacon) TableName() string {

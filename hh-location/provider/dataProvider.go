@@ -7,10 +7,12 @@ import (
 
 type DataProvider interface {
 	GetBeacons() []models.Beacon
-	GetDevices(uid string) []models.Device
-	GetDevicesPositions() []models.DevicesPositions
 
-	PostPosition(p models.Position)
+	GetDevices(uid string) []models.Device
+	PostDevice(d *models.Device)
+
+	GetDevicesPositions() []models.DevicesPositions
+	PostPosition(p *models.Position)
 
 	Close()
 }

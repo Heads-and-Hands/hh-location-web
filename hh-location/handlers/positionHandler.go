@@ -16,37 +16,39 @@ var PositionGetHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Re
 })
 
 var PositionPostHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 	p := PositionFromJson(r.Body)
-	provider.GetProvider().PostPosition(p)
+	var success map[string]string
+	if p != nil {
+		provider.GetProvider().PostPosition(p)
+		success = map[string]string{"message": "ok"}
+	} else {
+		success = map[string]string{"message": "error. incorrect uid"}
+	}
 
-	var success = map[string]string{"message": "ok"}
 	var payload, _ = json.Marshal(success)
 	w.Write([]byte(payload))
 })
 
-func PositionFromJson(from io.ReadCloser) models.Position {
-	type PositionJS struct {
-		UID  string
-		PosX int
-		PosY int
-	}
+func PositionFromJson(from io.ReadCloser) *models.Position {
 
-	var d PositionJS
+	var d models.PositionJS
 	decoder := json.NewDecoder(from)
 	err := decoder.Decode(&d)
 	if err != nil {
 		panic(err)
 	}
 
-	devices := provider.GetProvider().GetDevices(d.UID)
+	devices := provider.GetProvider().GetDevices(d.Uid)
+	if len(devices) == 0 {
+		return nil
+	}
 	device := devices[0]
 
 	var p = models.Position{
-		DeviceID: device.ID,
+		DeviceId: device.Id,
 		PosX:     d.PosX,
 		PosY:     d.PosY,
 		Time:     time.Now(),
 	}
-	return p
+	return &p
 }

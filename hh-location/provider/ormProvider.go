@@ -67,13 +67,13 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 	positions := []models.DevicesPositions{}
 	for _, elem := range devices {
 		p := models.Position{}
-		dbp.db.Table("position").Where("device_id = ?", elem.ID).Last(&p)
+		dbp.db.Table("position").Where("device_id = ?", elem.Id).Last(&p)
 		dp := models.DevicesPositions{
-			ID:         p.ID,
+			Id:         p.Id,
 			PosY:       p.PosY,
 			PosX:       p.PosX,
 			Time:       p.Time,
-			DeviceID:   elem.ID,
+			DeviceId:   elem.Id,
 			DeviceName: elem.Name,
 		}
 		positions = append(positions, dp)
@@ -82,7 +82,11 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 	return positions
 }
 
-func (dbp ormProvider) PostPosition(p models.Position) {
+func (dbp ormProvider) PostDevice(d *models.Device) {
+	dbp.db.Table("device").Create(d)
+}
+
+func (dbp ormProvider) PostPosition(p *models.Position) {
 	p.Time = time.Now()
-	dbp.db.Table("position").Create(&p)
+	dbp.db.Table("position").Create(p)
 }

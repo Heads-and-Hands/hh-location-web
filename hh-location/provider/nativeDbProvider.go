@@ -76,7 +76,7 @@ func (dbp nativeDbProvider) GetDevicesPositions() []models.DevicesPositions {
 func (dbp nativeDbProvider) PostPosition(p models.Position) {
 	db := dbp.getDB()
 	_, err := db.Exec("INSERT INTO position (device_id, pos_x, pos_y) VALUES (?, ?, ?)",
-		p.DeviceID, p.PosX, p.PosY)
+		p.DeviceId, p.PosX, p.PosY)
 	if err != nil {
 		log.Println(err)
 	}
