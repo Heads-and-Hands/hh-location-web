@@ -83,7 +83,14 @@ func (dbp ormProvider) GetDevicesPositions() []models.DevicesPositions {
 }
 
 func (dbp ormProvider) PostDevice(d *models.Device) {
-	dbp.db.Table("device").Create(d)
+	device := models.Device{}
+	dbp.db.Table("device").Where("name like ?", d.Name).First(&device)
+	if device.Uid != "" {
+		device.Uid = d.Uid
+		dbp.db.Save(&device)
+	} else {
+		dbp.db.Table("device").Create(d)
+	}
 }
 
 func (dbp ormProvider) PostPosition(p *models.Position) {
