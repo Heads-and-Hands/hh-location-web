@@ -20,7 +20,7 @@ services:
       volumes:
         - "./database:/var/lib/mysql"
   app:
-      build: ./hh-location
+      image: registry.handh.ru:5000/location-app:latest
       restart: always
       ports:
         - "8887:8877"
@@ -30,3 +30,5 @@ services:
         - db
       volumes:
         - "./config:/go/bin/config"
+      labels:
+        - "traefik.frontend.rule=Host:location.headsandhands.ru"
