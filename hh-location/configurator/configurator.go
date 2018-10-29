@@ -16,12 +16,21 @@ var once sync.Once
 
 func GetConfiguration() *Configuration {
 	once.Do(func() {
-		confInst = load()
+		confInst = loadFromEnv()
 	})
 	return confInst
 }
 
-func load() *Configuration {
+func loadFromEnv() *Configuration {
+	// "root:rootroot@tcp(localhost:3306)/hh-location?parseTime=true"
+	result := &Configuration{}
+	result.DbString = os.Getenv("MYSQL_USER") + ":" +
+		os.Getenv("MYSQL_PASSWORD") + "@tcp(" +
+		os.Getenv("MYSQL_HOST") + ")/" +
+		os.Getenv("MYSQL_DATABASE") + "?parseTime=true"
+}
+
+func loadFromJSON() *Configuration {
 	result := &Configuration{}
 	absPath, _ := filepath.Abs("./bin/config/config.json")
 	err := gonfig.GetConf(absPath, result)

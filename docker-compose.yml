@@ -17,15 +17,14 @@ services:
   app:
     networks:
       - db
-      - proxy
     image: registry.handh.ru:5000/location-app:latest
     volumes:
       - "./config:/go/bin/config"
     environment:
-      MYSQL_HOST: db:3306
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DATABASE: hh-location      
+      MYSQL_HOST: "db:3306"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_DATABASE: "hh-location"      
     labels:
       - "traefik.frontend.rule=Host:location.headsandhands.ru"
       - "traefik.port=8877"
@@ -34,5 +33,3 @@ services:
 networks:
   db:
     external: false
-  proxy:
-    external: true
