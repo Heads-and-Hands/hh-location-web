@@ -22,7 +22,7 @@ services:
     image: registry.handh.ru:5000/location-app:latest
     restart: always
     ports:
-      - "8887:8877"
+      - "8877:8877"
     networks:
       - default
     depends_on:
