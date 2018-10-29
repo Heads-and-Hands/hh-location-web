@@ -32,7 +32,7 @@ func loadFromEnv() *Configuration {
 		os.Getenv("MYSQL_DATABASE") + "?parseTime=true"
 
 	log.Println("DB: ")
-	log.Println(result)
+	log.Println(result.DbString)
 
 	return result
 }
