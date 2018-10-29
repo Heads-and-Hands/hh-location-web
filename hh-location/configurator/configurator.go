@@ -31,6 +31,9 @@ func loadFromEnv() *Configuration {
 		os.Getenv("MYSQL_HOST") + ")/" +
 		os.Getenv("MYSQL_DATABASE") + "?parseTime=true"
 
+	log.Println("DB: ")
+	log.Println(result)
+
 	return result
 }
 
