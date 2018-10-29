@@ -29,6 +29,7 @@ func main() {
 	r.Handle("/position", middleware.WebCommonHandler(handlers.PositionGetHandler)).Methods("GET")
 	r.Handle("/position", middleware.MobileCommonHandler(handlers.PositionPostHandler)).Methods("POST")
 
+	log.Println("Hello admin!")
 	m := myAdminConfig.Init()
 	r.PathPrefix("/admin").Handler(m)
 

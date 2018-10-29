@@ -22,13 +22,14 @@ func GetOrmInstance(config *configurator.Configuration) *ormProvider {
 	ormDB = getDB(config)
 	if ormDB == nil {
 		return nil
+	} else {
+		once.Do(func() {
+			ormInstance = &ormProvider{
+				db: ormDB,
+			}
+		})
+		return ormInstance
 	}
-	once.Do(func() {
-		ormInstance = &ormProvider{
-			db:  ormDB,
-		}
-	})
-	return ormInstance
 }
 
 func (dbp ormProvider) Close() {

@@ -6,9 +6,12 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/qor/admin"
 	"net/http"
+	"time"
 )
 
 func Init() *http.ServeMux {
+
+	time.Sleep(5 * time.Second)
 
 	dbString := configurator.GetConfiguration().DbString
 	DB, _ := gorm.Open("mysql", dbString)
