@@ -5,6 +5,7 @@ import (
 	"log"
 	"path/filepath"
 	"sync"
+	"os"
 )
 
 type Configuration struct {

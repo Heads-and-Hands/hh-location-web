@@ -12,8 +12,6 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - "./database:/var/lib/mysql"
-    labels:
-      - "traefik.enable=false"
   app:
     networks:
       - db
@@ -25,10 +23,6 @@ services:
       MYSQL_USER: "root"
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "hh-location"      
-    labels:
-      - "traefik.frontend.rule=Host:location.headsandhands.ru"
-      - "traefik.port=8877"
-      - "traefik.docker.network=proxy"
 
 networks:
   db:
