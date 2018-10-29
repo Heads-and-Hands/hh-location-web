@@ -1,0 +1,38 @@
+version: '3'
+  
+services:
+  db:
+    networks:
+      - db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hh-location
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - "./database:/var/lib/mysql"
+    labels:
+      - "traefik.enable=false"
+  app:
+    networks:
+      - db
+      - proxy
+    image: registry.handh.ru:5000/location-app:latest
+    volumes:
+      - "./config:/go/bin/config"
+    environment:
+      MYSQL_HOST: db:3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: hh-location      
+    labels:
+      - "traefik.frontend.rule=Host:location.headsandhands.ru"
+      - "traefik.port=8877"
+      - "traefik.docker.network=proxy"
+
+networks:
+  db:
+    external: false
+  proxy:
+    external: true
