@@ -11,18 +11,21 @@ import (
 )
 
 type ormProvider struct {
-	cfg *configurator.Configuration
 	db  *gorm.DB
 }
 
 var ormInstance *ormProvider
+var ormDB *gorm.DB
 var ormOnce sync.Once
 
 func GetOrmInstance(config *configurator.Configuration) *ormProvider {
+	ormDB = getDB(config)
+	if ormDB == nil {
+		return nil
+	}
 	once.Do(func() {
 		ormInstance = &ormProvider{
-			cfg: config,
-			db:  getDB(config),
+			db:  ormDB,
 		}
 	})
 	return ormInstance
@@ -39,6 +42,7 @@ func getDB(cfg *configurator.Configuration) *gorm.DB {
 	newDb, err := gorm.Open("mysql", dbString)
 	if err != nil {
 		log.Println(err)
+		return nil
 	}
 	return newDb
 }
