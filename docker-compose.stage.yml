@@ -18,7 +18,7 @@ services:
     networks:
       - db
       - proxy
-    image: registry.handh.ru:5000/location-app:latest
+    image: registry.handh.ru/location/backend-app:latest
     environment:
       MYSQL_HOST: "db:3306"
       MYSQL_USER: "root"
