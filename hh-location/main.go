@@ -1,11 +1,11 @@
 package main
 
 import (
-	"beacon/hh-location/handlers"
-	"beacon/hh-location/middleware"
-	"beacon/hh-location/myAdminConfig"
-	"beacon/hh-location/provider"
 	"github.com/gorilla/mux"
+	"hh-location-web/hh-location/handlers"
+	"hh-location-web/hh-location/middleware"
+	"hh-location-web/hh-location/myAdminConfig"
+	"hh-location-web/hh-location/provider"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +23,7 @@ func main() {
 
 	r.Handle("/device", middleware.WebCommonHandler(handlers.DeviceGetHandler)).Methods("GET")
 	r.Handle("/device", middleware.MobileCommonHandler(handlers.DevicePostHandler)).Methods("POST")
+	r.Handle("/owner", middleware.MobileCommonHandler(handlers.OwnerPostHandler)).Methods("POST")
 
 	r.Handle("/beacon", middleware.MobileCommonHandler(handlers.BeaconGetHandler)).Methods("GET")
 
@@ -38,6 +39,7 @@ func main() {
 
 func onStart() {
 	log.Println("Hello!")
+
 	SetupCloseHandler()
 }
 

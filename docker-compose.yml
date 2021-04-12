@@ -19,7 +19,7 @@ services:
     volumes:
       - "./database:/var/lib/mysql"
   app:
-    image: registry.handh.ru:5000/location-app:latest
+    image: registry.handh.ru/location/backend-app:latest
     restart: always
     ports:
       - "8877:8877"
@@ -32,4 +32,5 @@ services:
       MYSQL_USER: "root"
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "hh-location"
+
 

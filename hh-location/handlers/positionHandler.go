@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"beacon/hh-location/models"
-	"beacon/hh-location/provider"
 	"encoding/json"
+	"hh-location-web/hh-location/models"
+	"hh-location-web/hh-location/provider"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -35,7 +36,7 @@ func PositionFromJson(from io.ReadCloser) *models.Position {
 	decoder := json.NewDecoder(from)
 	err := decoder.Decode(&d)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	devices := provider.GetProvider().GetDevices(d.Uid)

@@ -1,10 +1,10 @@
 package provider
 
 import (
-	"beacon/hh-location/configurator"
-	"beacon/hh-location/models"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"hh-location-web/hh-location/configurator"
+	"hh-location-web/hh-location/models"
 	"log"
 	"sync"
 )

@@ -1,8 +1,7 @@
 package provider
 
 import (
-	"beacon/hh-location/configurator"
-	"beacon/hh-location/models"
+	"hh-location-web/hh-location/models"
 )
 
 type DataProvider interface {
@@ -13,11 +12,11 @@ type DataProvider interface {
 
 	GetDevicesPositions() []models.DevicesPositions
 	PostPosition(p *models.Position)
+	PostOwner(Id int, OwnerId int)
 
 	Close()
 }
 
 func GetProvider() DataProvider {
-	cfg := configurator.GetConfiguration()
-	return GetOrmInstance(cfg)
+	return OrmInstance
 }

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"beacon/hh-location/provider"
 	"encoding/json"
+	"hh-location-web/hh-location/provider"
 	"log"
 	"net/http"
 )

@@ -3,9 +3,10 @@ package configurator
 import (
 	"github.com/tkanos/gonfig"
 	"log"
+	"os"
 	"path/filepath"
 	"sync"
-	"os"
+	"time"
 )
 
 type Configuration struct {
@@ -23,6 +24,8 @@ func GetConfiguration() *Configuration {
 }
 
 func loadFromEnv() *Configuration {
+	time.Sleep(5 * time.Second)
+
 	// "root:rootroot@tcp(localhost:3306)/hh-location?parseTime=true"
 	result := &Configuration{}
 
@@ -31,9 +34,7 @@ func loadFromEnv() *Configuration {
 		os.Getenv("MYSQL_HOST") + ")/" +
 		os.Getenv("MYSQL_DATABASE") + "?parseTime=true"
 
-	log.Println("DB: ")
 	log.Println(result.DbString)
-
 	return result
 }
 
